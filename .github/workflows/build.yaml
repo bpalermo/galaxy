@@ -1,0 +1,33 @@
+name: Test and Build
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-22.04
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v3
+    -
+      name: Setup bazelisk
+      uses: bazelbuild/setup-bazelisk@v2
+    -
+      name: Mount bazel cache
+      uses: actions/cache@v3
+      with:
+        path: "~/.cache/bazel"
+        key: bazel
+    -
+      name: Bazel test
+      run: bazel test //...
+    -
+      name: Bazel build
+      run: bazel build //...

@@ -1,0 +1,10 @@
+load("@dev_palermo_galaxy//bazel:spring_boot_deps.bzl", "SPRING_BOOT_API_DEPS")
+load("@io_bazel_rules_docker//java:image.bzl", "java_image")
+
+java_image(
+    name = "app_image",
+    srcs = glob(["src/**/*.java"]),
+    main_class = "dev.palermo.galaxy.apps.mailer.App",
+    resources = glob(["src/main/resources/**/*"]),
+    deps = SPRING_BOOT_API_DEPS,
+)

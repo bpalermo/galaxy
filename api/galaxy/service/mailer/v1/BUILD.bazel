@@ -1,0 +1,33 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+proto_library(
+    name = "v1_proto",
+    srcs = [
+        "message.proto",
+        "service.proto",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_proto"],
+)
+
+#gazelle:go_grpc_compilers @io_bazel_rules_go//proto:go_grpc,@dev_palermo_galaxy//bazel/grpc-gateway:go_gen_grpc_gateway
+go_proto_library(
+    name = "v1_go_proto",
+    compilers = [
+        "@io_bazel_rules_go//proto:go_grpc",
+        "@dev_palermo_galaxy//bazel/grpc-gateway:go_gen_grpc_gateway",
+    ],
+    importpath = "github.com/bpalermo/galaxy-api/service/mailer/v1",
+    proto = ":v1_proto",
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_go_proto"],
+)
+
+go_library(
+    name = "mailer",
+    embed = [":v1_go_proto"],
+    importpath = "github.com/bpalermo/galaxy-api/service/mailer/v1",
+    visibility = ["//visibility:public"],
+)

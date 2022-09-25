@@ -3,7 +3,39 @@ startup --host_jvm_args=-Xmx3g
 run --color=yes
 
 build --color=yes
+
+# java
 build --java_language_version=17
 build --java_runtime_version=remotejdk_17
 
 --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+
+build:remote --jobs=50
+build:remote --experimental_remote_cache_compression
+build:remote --noslim_profile
+build:remote --experimental_profile_include_target_label
+build:remote --experimental_profile_include_primary_output
+
+build:remote --bes_results_url=https://app.buildbuddy.io/invocation/
+build:remote --bes_backend=grpcs://remote.buildbuddy.io
+build:remote --remote_cache=grpcs://remote.buildbuddy.io
+build:remote --remote_timeout=3600
+
+build:remote --remote_executor=grpcs://remote.buildbuddy.io
+build:remote --host_platform=@buildbuddy_toolchain//:platform
+build:remote --platforms=@buildbuddy_toolchain//:platform
+build:remote --extra_execution_platforms=@buildbuddy_toolchain//:platform
+build:remote --crosstool_top=@buildbuddy_toolchain//:toolchain
+build:remote --extra_toolchains=@buildbuddy_toolchain//:cc_toolchain
+build:remote --javabase=@buildbuddy_toolchain//:javabase_jdk8
+build:remote --host_javabase=@buildbuddy_toolchain//:javabase_jdk8
+build:remote --java_toolchain=@buildbuddy_toolchain//:toolchain_jdk8
+build:remote --host_java_toolchain=@buildbuddy_toolchain//:toolchain_jdk8
+build:remote --define=EXECUTOR=remote
+
+build:ci --build_metadata=ROLE=CI
+build:ci --bes_results_url=https://app.buildbuddy.io/invocation/
+build:ci --bes_backend=grpcs://remote.buildbuddy.io
+
+build:ci --aspects=@rules_rust//rust:defs.bzl%rustfmt_aspect
+build:ci --output_groups=+rustfmt_checks

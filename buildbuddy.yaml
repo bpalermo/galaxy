@@ -1,0 +1,8 @@
+actions:
+- name: "Test all targets"
+  triggers:
+    pull_request:
+      branches:
+      - "*"
+  bazel_commands:
+  - "test --test_output=all --test_size_filters=-large,-enormous //... --config=remote --config=ci"

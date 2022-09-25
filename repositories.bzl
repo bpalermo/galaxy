@@ -2,8 +2,11 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-PROTO_GRPC_RULE_SHA = "bbe4db93499f5c9414926e46f9e35016999a4e9f6e3522482d3760dc61011070"
-PROTO_GRPC_RULE_VERSION = "4.2.0"
+BUILDBUDDY_TOOLCHAIN_RULE_SHA = "a2a5cccec251211e2221b1587af2ce43c36d32a42f5d881737db3b546a536510"
+BUILDBUDDY_TOOLCHAIN_RULE_VERSION = "829c8a574f706de5c96c54ca310f139f4acda7dd"
+
+PROTO_GRPC_RULE_SHA = "fb7fc7a3c19a92b2f15ed7c4ffb2983e956625c1436f57a3430b897ba9864059"
+PROTO_GRPC_RULE_VERSION = "4.3.0"
 
 KOTLIN_RULES_VERSION = "1.6.0"
 KOTLIN_RULES_SHA = "a57591404423a52bd6b18ebba7979e8cd2243534736c5c94d35c89718ea38f94"
@@ -17,8 +20,16 @@ RULES_JVM_EXTERNAL_SHA = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea1
 DOCKER_RULE_VERSION = "v0.25.0"
 DOCKER_RULE_SHA = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf"
 
-def galaxy_deps():
+def repositories():
     """Loads common dependencies needed to compile galaxy."""
+
+    if not native.existing_rule("io_buildbuddy_buildbuddy_toolchain"):
+        http_archive(
+            name = "io_buildbuddy_buildbuddy_toolchain",
+            sha256 = BUILDBUDDY_TOOLCHAIN_RULE_SHA,
+            strip_prefix = "buildbuddy-toolchain-{}".format(BUILDBUDDY_TOOLCHAIN_RULE_VERSION),
+            urls = ["https://github.com/buildbuddy-io/buildbuddy-toolchain/archive/{}.tar.gz".format(BUILDBUDDY_TOOLCHAIN_RULE_VERSION)],
+        )
 
     if not native.existing_rule("rules_proto_grpc"):
         http_archive(

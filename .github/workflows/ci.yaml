@@ -1,4 +1,4 @@
-name: Test and Build
+name: CI
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
     - main
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  test:
+    name: Test
     runs-on: ubuntu-22.04
     steps:
     -
@@ -27,7 +27,4 @@ jobs:
         key: bazel
     -
       name: Bazel test
-      run: bazel test --test_output=errors //...
-    -
-      name: Bazel build
-      run: bazel build //...
+      run: bazel test --test_output=errors --test_size_filters=large,enormous //... --config=ci --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_ORG_API_KEY }}

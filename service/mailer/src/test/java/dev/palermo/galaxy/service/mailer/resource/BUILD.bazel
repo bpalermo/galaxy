@@ -6,5 +6,6 @@ java_test(
     test_class = "dev.palermo.galaxy.service.mailer.resource.GreetResourceTest",
     deps = SPRING_BOOT_API_TEST_DEPS + [
         "//service/mailer/src/main:app_library",
+        "//service/mailer/src/test/java/dev/palermo/galaxy/service/mailer:base_rest_test_library",
     ],
 )

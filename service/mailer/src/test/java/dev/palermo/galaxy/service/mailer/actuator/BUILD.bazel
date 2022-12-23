@@ -1,0 +1,11 @@
+load("@dev_palermo_galaxy//bazel/spring:deps.bzl", "SPRING_BOOT_API_TEST_DEPS")
+
+java_test(
+    name = "actuator_test",
+    srcs = ["ActuatorTest.java"],
+    test_class = "dev.palermo.galaxy.service.mailer.actuator.ActuatorTest",
+    deps = SPRING_BOOT_API_TEST_DEPS + [
+        "//service/mailer/src/main:app_library",
+        "//service/mailer/src/test/java/dev/palermo/galaxy/service/mailer:base_rest_test_library",
+    ],
+)

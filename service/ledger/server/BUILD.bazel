@@ -1,0 +1,12 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "binary",
+    srcs = glob(["**/*.rs"]),
+    deps = [
+        "//service/ledger/lib:ledger_lib",
+        "@crate_index//:tokio",
+    ],
+)

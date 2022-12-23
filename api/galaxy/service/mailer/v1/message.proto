@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package galaxy.service.mailer.v1;
+
+option go_package = "github.com/bpalermo/galaxy-api/service/mailer/v1";
+
+message SendEmailRequest {
+  string value = 1;
+}
+
+message SendEmailResponse {
+  string value = 1;
+}

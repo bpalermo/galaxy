@@ -24,3 +24,6 @@
 /.sass-cache
 # User-specific .bazelrc
 user.bazelrc
+
+# Rust
+target

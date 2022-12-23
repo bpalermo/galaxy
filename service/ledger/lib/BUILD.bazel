@@ -1,0 +1,43 @@
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_test_suite")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "ledger_lib",
+    srcs = glob(["**/*.rs"]),
+    deps = [
+        "//lib/util_rust",
+        "//service/ledger/migration:migration_lib",
+        "@crate_index//:log",
+        "@crate_index//:sea-orm",
+        "@crate_index//:uuid",
+    ],
+)
+
+rust_test(
+    name = "unit_test",
+    crate = ":ledger_lib",
+    deps = [
+        "//lib/util_rust",
+        "@crate_index//:mockall",
+        "@crate_index//:tokio",
+    ],
+)
+
+rust_test_suite(
+    name = "integrated_test",
+    size = "large",
+    srcs = glob(["tests/**/*.rs"]),
+    deps = [
+        ":ledger_lib",
+        "//lib/test_util_rust",
+        "//lib/util_rust",
+        "//service/ledger/migration:migration_lib",
+        "@crate_index//:env_logger",
+        "@crate_index//:log",
+        "@crate_index//:sea-orm",
+        "@crate_index//:testcontainers",
+        "@crate_index//:tokio",
+        "@crate_index//:uuid",
+    ],
+)

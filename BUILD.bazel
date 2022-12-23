@@ -1,0 +1,26 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@io_bazel_rules_kotlin//kotlin:core.bzl", "define_kt_toolchain")
+
+# gazelle:prefix github.com/bpalermo/galaxy
+gazelle(name = "gazelle")
+
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=go_deps.bzl%go_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+)
+
+KOTLIN_LANGUAGE_LEVEL = "1.7"
+
+JAVA_LANGUAGE_LEVEL = "17"
+
+define_kt_toolchain(
+    name = "kotlin_toolchain",
+    api_version = KOTLIN_LANGUAGE_LEVEL,
+    jvm_target = JAVA_LANGUAGE_LEVEL,
+    language_version = KOTLIN_LANGUAGE_LEVEL,
+)

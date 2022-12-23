@@ -1,0 +1,30 @@
+load("@dev_palermo_galaxy//bazel/spring:deps.bzl", "SPRING_BOOT_API_DEPS")
+load("@io_bazel_rules_docker//java:image.bzl", "java_image")
+
+MAIN_CLASS = "dev.palermo.galaxy.service.mailer.App"
+
+RESOURCES = glob(["resources/**/*"])
+
+SRCS = glob(["java/**/*.java"])
+
+java_library(
+    name = "app_library",
+    srcs = SRCS,
+    resources = RESOURCES,
+    visibility = ["//service/mailer:__subpackages__"],
+    deps = SPRING_BOOT_API_DEPS,
+)
+
+java_binary(
+    name = "app",
+    main_class = MAIN_CLASS,
+    runtime_deps = [":app_library"],
+)
+
+java_image(
+    name = "app_image",
+    srcs = SRCS,
+    layers = SPRING_BOOT_API_DEPS,
+    main_class = MAIN_CLASS,
+    resources = RESOURCES,
+)

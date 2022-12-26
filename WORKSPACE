@@ -13,6 +13,12 @@ load("@io_buildbuddy_buildbuddy_toolchain//:rules.bzl", "buildbuddy")
 
 buildbuddy(name = "buildbuddy_toolchain")
 
+load("@rules_buf//buf:repositories.bzl", "rules_buf_dependencies", "rules_buf_toolchains")
+
+rules_buf_dependencies()
+
+rules_buf_toolchains(version = "v1.5.0")
+
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_repos", "rules_proto_grpc_toolchains")
 
 rules_proto_grpc_toolchains()
@@ -31,6 +37,10 @@ load("@rules_proto_grpc//:repositories.bzl", "bazel_gazelle", "io_bazel_rules_go
 io_bazel_rules_go()
 
 bazel_gazelle()
+
+load("@rules_buf//gazelle/buf:repositories.bzl", "gazelle_buf_dependencies")
+
+gazelle_buf_dependencies()
 
 load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
 
@@ -99,19 +109,7 @@ load("//bazel/spring:deps.bzl", "spring_boot_deps")
 
 spring_boot_deps()
 
-# Docker
-load("@io_bazel_rules_docker//repositories:repositories.bzl", container_repositories = "repositories")
-
-container_repositories()
-
-load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+# Container
+load("//bazel/container:deps.bzl", "container_deps")
 
 container_deps()
-
-load("@io_bazel_rules_docker//go:image.bzl", _go_image_repos = "repositories")
-
-_go_image_repos()
-
-load("@io_bazel_rules_docker//java:image.bzl", _java_image_repos = "repositories")
-
-_java_image_repos()

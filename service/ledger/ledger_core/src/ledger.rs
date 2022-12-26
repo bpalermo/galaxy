@@ -1,12 +1,10 @@
 use crate::entity::{account, account::Entity as Account, txn};
 use crate::error::LedgerError;
 
-use log::LevelFilter;
 use migration_lib::{Migrator, MigratorTrait};
 use sea_orm::{prelude::Decimal, *};
 use sea_query::{query::LockType, Expr};
 use std::sync::Arc;
-use std::time::Duration;
 use util_rust::util;
 use uuid::Uuid;
 
@@ -408,19 +406,4 @@ mod tests {
 
         Ok(())
     }
-}
-
-pub async fn run() -> Result<(), DbErr> {
-    println!("run");
-    let mut opt = ConnectOptions::new("mysql://root:password@localhost:3306/db".to_owned());
-    opt.max_connections(5)
-        .min_connections(1)
-        .connect_timeout(Duration::from_secs(5))
-        .acquire_timeout(Duration::from_secs(5))
-        .idle_timeout(Duration::from_secs(5))
-        .max_lifetime(Duration::from_secs(5))
-        .sqlx_logging(true)
-        .sqlx_logging_level(LevelFilter::Info);
-    let _db = Database::connect(opt).await?;
-    Ok(())
 }

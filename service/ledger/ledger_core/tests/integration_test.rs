@@ -1,5 +1,5 @@
 use env_logger;
-use ledger_lib::{
+use ledger_core::{
     entity::{account, txn},
     error::LedgerError,
     ledger::Ledger,

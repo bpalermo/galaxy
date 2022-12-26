@@ -20,6 +20,9 @@ RULES_JVM_EXTERNAL_SHA = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea1
 DOCKER_RULE_VERSION = "v0.25.0"
 DOCKER_RULE_SHA = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf"
 
+RULES_BUF_VERSION = "0.1.1"
+RULES_BUF_SHA = "523a4e06f0746661e092d083757263a249fedca535bd6dd819a8c50de074731a"
+
 def repositories():
     """Loads common dependencies needed to compile galaxy."""
 
@@ -66,4 +69,12 @@ def repositories():
             name = "io_bazel_rules_docker",
             sha256 = DOCKER_RULE_SHA,
             urls = ["https://github.com/bazelbuild/rules_docker/releases/download/{}/rules_docker-{}.tar.gz".format(DOCKER_RULE_VERSION, DOCKER_RULE_VERSION)],
+        )
+
+    if not native.existing_rule("rules_buf"):
+        http_archive(
+            name = "rules_buf",
+            sha256 = RULES_BUF_SHA,
+            strip_prefix = "rules_buf-%s" % RULES_BUF_VERSION,
+            urls = ["https://github.com/bufbuild/rules_buf/archive/refs/tags/v{}.zip".format(RULES_BUF_VERSION)],
         )

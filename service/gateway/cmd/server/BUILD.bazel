@@ -21,7 +21,7 @@ go_binary(
 )
 
 go_image(
-    name = "server_image",
+    name = "image",
     binary = ":server",
 )
 

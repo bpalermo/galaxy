@@ -1,22 +1,28 @@
 load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_test_suite")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//service/ledger:__subpackages__"])
 
 rust_library(
-    name = "ledger_lib",
+    name = "ledger_core",
     srcs = glob(["**/*.rs"]),
+    proc_macro_deps = [
+        "@crate_index//:serde_derive",
+    ],
     deps = [
         "//lib/util_rust",
         "//service/ledger/migration:migration_lib",
+        "@crate_index//:figment",
         "@crate_index//:log",
+        "@crate_index//:once_cell",
         "@crate_index//:sea-orm",
+        "@crate_index//:serde",
         "@crate_index//:uuid",
     ],
 )
 
 rust_test(
     name = "unit_test",
-    crate = ":ledger_lib",
+    crate = ":ledger_core",
     deps = [
         "//lib/util_rust",
         "@crate_index//:mockall",
@@ -29,7 +35,7 @@ rust_test_suite(
     size = "large",
     srcs = glob(["tests/**/*.rs"]),
     deps = [
-        ":ledger_lib",
+        ":ledger_core",
         "//lib/test_util_rust",
         "//lib/util_rust",
         "//service/ledger/migration:migration_lib",

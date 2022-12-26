@@ -15,7 +15,7 @@ import (
 )
 
 type server struct {
-	grpcGw.UnimplementedApiGatewayServer
+	grpcGw.UnimplementedApiGatewayServiceServer
 }
 
 func (g *server) Echo(_ context.Context, request *grpcGw.EchoRequest) (*grpcGw.EchoResponse, error) {
@@ -41,7 +41,7 @@ func Run(grpcServerEndpoint string, logger *logrus.Logger) error {
 	// Create a gRPC server object
 	s := grpc.NewServer()
 	// Attach the Greeter service to the server
-	grpcGw.RegisterApiGatewayServer(s, &server{})
+	grpcGw.RegisterApiGatewayServiceServer(s, &server{})
 	// Serve gRPC server
 	logger.Printf("Serving gRPC on %s", grpcServerEndpoint)
 	go func() {
@@ -50,7 +50,7 @@ func Run(grpcServerEndpoint string, logger *logrus.Logger) error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err = grpcGw.RegisterApiGatewayHandlerFromEndpoint(ctx, mux, grpcServerEndpoint, opts)
+	err = grpcGw.RegisterApiGatewayServiceHandlerFromEndpoint(ctx, mux, grpcServerEndpoint, opts)
 	if err != nil {
 		return err
 	}

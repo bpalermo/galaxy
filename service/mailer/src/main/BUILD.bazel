@@ -22,7 +22,7 @@ java_binary(
 )
 
 java_image(
-    name = "app_image",
+    name = "image",
     srcs = SRCS,
     layers = SPRING_BOOT_API_DEPS,
     main_class = MAIN_CLASS,

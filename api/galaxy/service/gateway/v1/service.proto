@@ -2,13 +2,13 @@ syntax = "proto3";
 
 package galaxy.service.gateway.v1;
 
-import "api/galaxy/service/gateway/v1/message.proto";
+import "galaxy/service/gateway/v1/message.proto";
 
 import "google/api/annotations.proto";
 
 option go_package = "github.com/bpalermo/galaxy-api/service/gateway/v1";
 
-service ApiGateway {
+service ApiGatewayService {
 
   rpc Echo(galaxy.service.gateway.v1.EchoRequest) returns (galaxy.service.gateway.v1.EchoResponse) {
     // option type is http

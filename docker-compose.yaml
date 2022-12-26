@@ -1,0 +1,27 @@
+version: "2.4"
+
+services:
+  db:
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: ledger
+    ports:
+    - "3306:3306"
+    healthcheck:
+      test: mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD -D$$MYSQL_DATABASE -e'SELECT 1;'
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  ledger:
+    image: bazel/service/ledger/server:image
+    environment:
+      LOG_LEVEL: info
+      RUN_MODE: container
+    depends_on:
+      db:
+        condition: service_healthy
+

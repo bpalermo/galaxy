@@ -1,9 +1,11 @@
+use figment;
 use std::{error, fmt};
 
 #[derive(Eq, Debug, PartialEq)]
 pub enum LedgerError {
     AccountNotFoundError,
     AddBalanceError,
+    ConfigError,
     DatabaseError,
     InsufficientBalanceError,
     TransactionError,
@@ -16,10 +18,17 @@ impl fmt::Display for LedgerError {
         match self {
             LedgerError::AccountNotFoundError => write!(f, "Account was not found"),
             LedgerError::AddBalanceError => write!(f, "Add balance error"),
+            LedgerError::ConfigError => write!(f, "Config error"),
             LedgerError::DatabaseError => write!(f, "Database error"),
             LedgerError::InsufficientBalanceError => write!(f, "Insufficient account balance"),
             LedgerError::TransactionError => write!(f, "Transaction error"),
         }
+    }
+}
+
+impl From<figment::Error> for LedgerError {
+    fn from(_: figment::Error) -> Self {
+        LedgerError::ConfigError
     }
 }
 

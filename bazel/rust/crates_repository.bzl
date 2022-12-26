@@ -18,12 +18,34 @@ def crates_repository():
             "env_logger": crate.spec(
                 version = "0.10.0",
             ),
+            "figment": crate.spec(
+                version = "0.10.8",
+                features = [
+                    "env",
+                    "toml",
+                ],
+            ),
             "log": crate.spec(
                 version = "0.4.17",
             ),
             "mockall": crate.spec(
                 version = "0.11.3",
             ),
+            "once_cell": crate.spec(
+                version = "1.16.0",
+            ),
+            "prost": crate.spec(
+                version = "0.11.5",
+            ),
+            "prost-build": crate.spec(
+                version = "0.11.5",
+            ),
+            #            "protoc-gen-prost": crate.spec(
+            #                version = "0.2.1",
+            #            ),
+            #            "protoc-gen-tonic": crate.spec(
+            #                version = "0.2.1",
+            #            ),
             "tokio": crate.spec(
                 version = "1.23.0",
                 features = [
@@ -43,8 +65,29 @@ def crates_repository():
             "sea-orm-migration": crate.spec(
                 version = "0.10.5",
             ),
+            "serde": crate.spec(
+                version = "1.0.151",
+                features = [
+                    "derive",
+                ],
+            ),
+            "serde_derive": crate.spec(
+                version = "1.0.151",
+            ),
+            "serde_json": crate.spec(
+                version = "1.0.91",
+            ),
             "testcontainers": crate.spec(
                 version = "0.14.0",
+            ),
+            "tonic": crate.spec(
+                version = "0.8.3",
+            ),
+            "tonic-build": crate.spec(
+                version = "0.8.4",
+            ),
+            "tonic-health": crate.spec(
+                version = "0.8.0",
             ),
             "uuid": crate.spec(
                 version = "1.2.2",

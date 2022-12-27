@@ -9,13 +9,14 @@ rust_library(
         "@crate_index//:serde_derive",
     ],
     deps = [
-        "//lib/util_rust",
+        "//lib/util_rust:util_lib",
         "//service/ledger/migration:migration_lib",
         "@crate_index//:figment",
         "@crate_index//:log",
         "@crate_index//:once_cell",
         "@crate_index//:sea-orm",
         "@crate_index//:serde",
+        "@crate_index//:time",
         "@crate_index//:uuid",
     ],
 )
@@ -24,7 +25,7 @@ rust_test(
     name = "unit_test",
     crate = ":ledger_core",
     deps = [
-        "//lib/util_rust",
+        "//lib/util_rust:util_lib",
         "@crate_index//:mockall",
         "@crate_index//:tokio",
     ],
@@ -36,8 +37,8 @@ rust_test_suite(
     srcs = glob(["tests/**/*.rs"]),
     deps = [
         ":ledger_core",
-        "//lib/test_util_rust",
-        "//lib/util_rust",
+        "//lib/test_util_rust:test_util_lib",
+        "//lib/util_rust:util_lib",
         "//service/ledger/migration:migration_lib",
         "@crate_index//:env_logger",
         "@crate_index//:log",

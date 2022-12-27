@@ -19,8 +19,17 @@ pub struct Config {
     pub run_mode: String,
     /// The port to bind to
     pub port: u16,
+    /// Authentication config
+    pub authentication: Authentication,
     /// Database config
     pub database: Database,
+}
+
+/// Authentication config
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Authentication {
+    /// JWT subject header
+    pub subject_header: String,
 }
 
 /// Database config
@@ -28,8 +37,8 @@ pub struct Config {
 pub struct Database {
     /// Full database url
     pub url: String,
-    /// Database debug logging
-    pub debug: bool,
+    /// Database logging level
+    pub log_level: String,
     /// Database pool config
     pub pool: DbPool,
 }
@@ -48,9 +57,12 @@ impl Default for Config {
         Config {
             run_mode: "production".to_string(),
             port: 50051,
+            authentication: Authentication {
+                subject_header: "x-jwt-subject".to_string(),
+            },
             database: Database {
                 url: "mysql://user:password@db:3306/ledger".to_string(),
-                debug: false,
+                log_level: "error".to_string(),
                 pool: DbPool { min: 1, max: 2 },
             },
         }

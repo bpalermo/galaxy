@@ -1,0 +1,32 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["money.proto"])
+
+filegroup(
+    name = "proto_files",
+    data = glob(["*.proto"]),
+    visibility = ["//api/galaxy:__pkg__"],
+)
+
+# gazelle:proto_strip_import_prefix /api
+proto_library(
+    name = "money_proto",
+    srcs = ["money.proto"],
+    strip_import_prefix = "/api",
+)
+
+go_proto_library(
+    name = "money_go_proto",
+    importpath = "github.com/bpalermo/galaxy-api/type/money",
+    proto = ":money_proto",
+)
+
+go_library(
+    name = "money",
+    embed = [":money_go_proto"],
+    importpath = "github.com/bpalermo/galaxy-api/type/money",
+)

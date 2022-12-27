@@ -25,11 +25,17 @@ def crates_repository():
                     "toml",
                 ],
             ),
+            "glob": crate.spec(
+                version = "0.3.0",
+            ),
             "log": crate.spec(
                 version = "0.4.17",
             ),
             "mockall": crate.spec(
                 version = "0.11.3",
+            ),
+            "num-traits": crate.spec(
+                version = "0.2.15",
             ),
             "once_cell": crate.spec(
                 version = "1.16.0",
@@ -40,17 +46,16 @@ def crates_repository():
             "prost-build": crate.spec(
                 version = "0.11.5",
             ),
-            #            "protoc-gen-prost": crate.spec(
-            #                version = "0.2.1",
-            #            ),
-            #            "protoc-gen-tonic": crate.spec(
-            #                version = "0.2.1",
-            #            ),
-            "tokio": crate.spec(
-                version = "1.23.0",
+            "prost-derive": crate.spec(
+                version = "0.11.5",
+            ),
+            "prost-types": crate.spec(
+                version = "0.11.5",
+            ),
+            "rust_decimal": crate.spec(
+                version = "1.27.0",
                 features = [
-                    "macros",
-                    "rt-multi-thread",
+                    "maths",
                 ],
             ),
             "sea-orm": crate.spec(
@@ -76,6 +81,16 @@ def crates_repository():
             ),
             "serde_json": crate.spec(
                 version = "1.0.91",
+            ),
+            "time": crate.spec(
+                version = "0.3.17",
+            ),
+            "tokio": crate.spec(
+                version = "1.23.0",
+                features = [
+                    "macros",
+                    "rt-multi-thread",
+                ],
             ),
             "testcontainers": crate.spec(
                 version = "0.14.0",

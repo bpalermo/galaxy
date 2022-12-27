@@ -16,11 +16,23 @@ services:
       timeout: 5s
       retries: 10
 
+  gw:
+    image: bazel/service/gateway/cmd/server:image
+    environment:
+      LOG_LEVEL: info
+    ports:
+    - "8081:8081"
+    depends_on:
+      ledger:
+        condition: service_started
+
   ledger:
     image: bazel/service/ledger/server:image
     environment:
       LOG_LEVEL: info
       RUN_MODE: container
+    ports:
+    - "50051:50051"
     depends_on:
       db:
         condition: service_healthy

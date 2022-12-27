@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package galaxy.type.account.v1;
+
+import "galaxy/type/money.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/bpalermo/galaxy-api/type/account/v1";
+
+message Account {
+  string id = 1;
+  string owner_id = 2;
+  galaxy.type.Money balance = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp created_at = 5;
+}

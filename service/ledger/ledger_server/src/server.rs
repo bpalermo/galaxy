@@ -1,5 +1,6 @@
-use crate::{ledger::ledger_service_server::LedgerServiceServer, service::LedgerServiceImpl};
+use crate::service::LedgerServer;
 
+use galaxy_api::service::ledger::v1::ledger_service_server::LedgerServiceServer;
 use ledger_core::context::Context;
 use ledger_core::error::LedgerError;
 use log::info;
@@ -24,9 +25,14 @@ impl Server {
 
         info!("Server listening on {}", addr);
 
+        let ledger_server: LedgerServer = LedgerServer::new(
+            self.ctx.ledger.clone(),
+            self.ctx.config.authentication.subject_header.clone(),
+        );
+
         TonicServer::builder()
             .add_service(health_service)
-            .add_service(LedgerServiceServer::new(LedgerServiceImpl::default()))
+            .add_service(LedgerServiceServer::new(ledger_server))
             .serve(*addr)
             .await?;
 

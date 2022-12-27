@@ -2,15 +2,22 @@ syntax = "proto3";
 
 package galaxy.service.gateway.v1;
 
-import "galaxy/service/gateway/v1/message.proto";
-
+import "galaxy/service/ledger/v1/service.proto";
 import "google/api/annotations.proto";
 
 option go_package = "github.com/bpalermo/galaxy-api/service/gateway/v1";
 
+message EchoRequest {
+  string value = 1;
+}
+
+message EchoResponse {
+  string value = 1;
+}
+
 service ApiGatewayService {
 
-  rpc Echo(galaxy.service.gateway.v1.EchoRequest) returns (galaxy.service.gateway.v1.EchoResponse) {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
     // option type is http
     option (google.api.http) = {
       // this is url, for REST-full/JSON api and method
@@ -20,6 +27,14 @@ service ApiGatewayService {
     };
   }
 
+  rpc NewAccount(galaxy.service.ledger.v1.NewAccountRequest) returns (galaxy.service.ledger.v1.NewAccountResponse) {
+    option (google.api.http) = {
+      // this is url, for REST-full/JSON api and method
+      // this line means when a HTTP post request comes with "/v1/account" call this rpc method over this service
+      post: "/v1/account"
+      body: "*"
+    };
+  }
 }
 
 

@@ -1,11 +1,27 @@
-load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
 
 package(default_visibility = ["//visibility:public"])
 
 rust_library(
-    name = "util_rust",
+    name = "util_lib",
     srcs = glob(["**/*.rs"]),
     deps = [
-        "@crate_index//:sea-orm",
+        "//api/galaxy:rust_default_library",
+        "@crate_index//:num-traits",
+        "@crate_index//:prost-types",
+        "@crate_index//:rust_decimal",
+        "@crate_index//:time",
+        "@crate_index//:tonic",
+        "@crate_index//:uuid",
+    ],
+)
+
+rust_test(
+    name = "unit_test",
+    crate = ":util_lib",
+    deps = [
+        "//api/galaxy:rust_default_library",
+        "@crate_index//:tokio",
+        "@crate_index//:tonic",
     ],
 )

@@ -15,7 +15,6 @@ gazelle_binary(
 # gazelle:prefix github.com/bpalermo/galaxy
 gazelle(
     name = "gazelle",
-    gazelle = ":gazelle-buf",
 )
 
 gazelle(

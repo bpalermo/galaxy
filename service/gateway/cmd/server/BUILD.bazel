@@ -10,7 +10,8 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//service/gateway/pkg/server",
-        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_rs_zerolog//:zerolog",
+        "@com_github_rs_zerolog//log",
     ],
 )
 

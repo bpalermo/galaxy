@@ -1,5 +1,6 @@
 use sea_orm::{entity::prelude::*, ActiveValue};
-use util_rust::util;
+use time::PrimitiveDateTime;
+use util_lib::util;
 use uuid::Uuid;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
@@ -10,8 +11,8 @@ pub struct Model {
     pub owner_id: Uuid,
     pub currency: String,
     pub balance: Decimal,
-    pub updated_at: Option<TimeDateTime>,
-    pub created_at: TimeDateTime,
+    pub updated_at: Option<PrimitiveDateTime>,
+    pub created_at: PrimitiveDateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

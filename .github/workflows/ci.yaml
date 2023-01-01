@@ -20,8 +20,11 @@ jobs:
       name: Mount bazel cache
       uses: actions/cache@v3
       with:
-        path: "~/.cache/bazel"
-        key: bazel
+        path: |
+          "~/.cache/bazel"
+          "~/.cache/bazel-repo"
+        key: bazel-cache-${{ hashFiles('**/BUILD.bazel', '**/*.bzl', 'WORKSPACE') }}
+        restore-keys: bazel-cache-
     -
       name: Bazel test
       run: bazel test --test_output=errors --test_size_filters=large,enormous //... --config=ci --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_ORG_API_KEY }}

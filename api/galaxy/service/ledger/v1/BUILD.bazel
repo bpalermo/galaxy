@@ -1,33 +1,45 @@
-load("@rules_buf//buf:defs.bzl", "buf_lint_test")
-load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@rules_buf//buf:defs.bzl", "buf_lint_test")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
+filegroup(
+    name = "proto_files",
+    data = glob(["*.proto"]),
+    visibility = ["//api/galaxy:__pkg__"],
+)
+
 exports_files(["service.proto"])
 
+# gazelle:proto_strip_import_prefix /api
 proto_library(
     name = "v1_proto",
     srcs = ["service.proto"],
     strip_import_prefix = "/api",
+    deps = [
+        "//api/galaxy/type:money_proto",
+        "//api/galaxy/type/account/v1:account_proto",
+    ],
 )
 
-#gazelle:go_grpc_compilers @io_bazel_rules_go//proto:go_grpc,@dev_palermo_galaxy//bazel/grpc-gateway:go_gen_grpc_gateway
 go_proto_library(
     name = "v1_go_proto",
-    compilers = [
-        "@io_bazel_rules_go//proto:go_grpc",
-        "@dev_palermo_galaxy//bazel/grpc-gateway:go_gen_grpc_gateway",
-    ],
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
     importpath = "github.com/bpalermo/galaxy-api/service/ledger/v1",
     proto = ":v1_proto",
-    deps = ["@go_googleapis//google/api:annotations_go_proto"],
+    deps = [
+        "//api/galaxy/type:money",
+        "//api/galaxy/type/account/v1:account",
+    ],
 )
 
 go_library(
     name = "ledger",
-    embed = [":v1_go_proto"],
+    embed = [
+        ":v1_go_proto",
+    ],
     importpath = "github.com/bpalermo/galaxy-api/service/ledger/v1",
 )
 

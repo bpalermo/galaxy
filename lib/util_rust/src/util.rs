@@ -1,11 +1,11 @@
-use sea_orm::prelude::{TimeDateTime, TimeDateTimeWithTimeZone};
+use time::{OffsetDateTime, PrimitiveDateTime};
 
 #[derive(Debug)]
 pub struct Util {}
 
 impl Util {
-    pub fn now() -> TimeDateTime {
-        let now = TimeDateTimeWithTimeZone::now_utc();
-        TimeDateTime::new(now.date(), now.time())
+    pub fn now() -> PrimitiveDateTime {
+        let now = OffsetDateTime::now_utc();
+        PrimitiveDateTime::new(now.date(), now.time())
     }
 }

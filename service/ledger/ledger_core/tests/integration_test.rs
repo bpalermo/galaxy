@@ -8,7 +8,7 @@ use log::LevelFilter;
 use migration_lib::{Migrator, MigratorTrait};
 use sea_orm::{prelude::Decimal, ConnectOptions, Database, DatabaseConnection};
 use std::sync::Arc;
-use test_util_rust::testcontainers::mysql::MySql;
+use test_util_lib::testcontainers::mysql::MySql;
 use testcontainers::clients;
 use uuid::{Uuid, Version};
 

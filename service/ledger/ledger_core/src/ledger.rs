@@ -5,7 +5,7 @@ use migration_lib::{Migrator, MigratorTrait};
 use sea_orm::{prelude::Decimal, *};
 use sea_query::{query::LockType, Expr};
 use std::sync::Arc;
-use util_rust::util;
+use util_lib::util;
 use uuid::Uuid;
 
 #[derive(FromQueryResult)]
@@ -16,6 +16,14 @@ struct AccountBalance {
 #[derive(Debug)]
 pub struct Ledger {
     db: Arc<DatabaseConnection>,
+}
+
+impl Default for Ledger {
+    fn default() -> Self {
+        Self {
+            db: Arc::new(DatabaseConnection::Disconnected),
+        }
+    }
 }
 
 impl Ledger {
@@ -286,7 +294,7 @@ mod tests {
     use crate::error::LedgerError;
     use sea_orm::prelude::Decimal;
     use std::sync::Arc;
-    use util_rust::util;
+    use util_lib::util;
     use uuid::{Uuid, Version};
 
     #[tokio::test]

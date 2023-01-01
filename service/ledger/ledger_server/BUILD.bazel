@@ -1,34 +1,18 @@
-load("@rules_rust//cargo:cargo_build_script.bzl", "cargo_build_script")
 load("@rules_rust//rust:defs.bzl", "rust_library")
 
 package(default_visibility = ["//service/ledger:__subpackages__"])
-
-cargo_build_script(
-    name = "proto_build_script",
-    srcs = ["build.rs"],
-    build_script_env = {
-        "PROTOC": "$(execpath @com_google_protobuf//:protoc)",
-        "SERVICE_PROTO": "$(location //api/galaxy/service/ledger/v1:service.proto)",
-    },
-    data = [
-        "//api/galaxy/service/ledger/v1:service.proto",
-        "//api/galaxy/service/ledger/v1:v1_proto",
-        "@com_google_protobuf//:protoc",
-    ],
-    deps = [
-        "@crate_index//:tonic-build",
-    ],
-)
 
 rust_library(
     name = "ledger_server",
     srcs = glob(["src/**/*.rs"]),
     deps = [
-        ":proto_build_script",
+        "//api/galaxy:rust_default_library",
+        "//lib/util_rust:util_lib",
         "//service/ledger/ledger_core",
         "@crate_index//:log",
         "@crate_index//:prost",
         "@crate_index//:tonic",
         "@crate_index//:tonic-health",
+        "@crate_index//:uuid",
     ],
 )

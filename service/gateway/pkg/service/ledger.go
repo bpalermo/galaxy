@@ -4,13 +4,14 @@ import (
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"time"
 
 	ledger "github.com/bpalermo/galaxy-api/service/ledger/v1"
 )
 
 type LedgerClient struct {
 	ledger.LedgerServiceClient
-	conn *grpc.ClientConn
+	BaseService
 }
 
 func NewLedgerClient(target string) *LedgerClient {
@@ -22,8 +23,11 @@ func NewLedgerClient(target string) *LedgerClient {
 	}
 
 	return &LedgerClient{
-		ledger.NewLedgerServiceClient(conn),
-		conn,
+		LedgerServiceClient: ledger.NewLedgerServiceClient(conn),
+		BaseService: BaseService{
+			conn:    conn,
+			timeout: 15 * time.Second,
+		},
 	}
 }
 

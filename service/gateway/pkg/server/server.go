@@ -41,15 +41,18 @@ func (srv *Server) Echo(_ context.Context, request *grpcGw.EchoRequest) (*grpcGw
 	}, nil
 }
 
-func (srv *Server) NewAccount(ctx context.Context, request *ledger.NewAccountRequest) (*ledger.NewAccountResponse, error) {
-	if request.OwnerId == "" {
-		return nil, status.Error(codes.InvalidArgument, "invalid owner_id")
-	}
+func (srv *Server) MyNewAccount(ctx context.Context, request *ledger.MyNewAccountRequest) (*ledger.MyNewAccountResponse, error) {
 	if request.Currency == "" || len(request.Currency) != 3 {
 		return nil, status.Error(codes.InvalidArgument, "invalid currency")
 	}
 
-	return srv.ledgerClient.NewAccount(ctx, request)
+	upstreamContext, cancel, err := srv.ledgerClient.NewAuthContextFromRequestContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+
+	return srv.ledgerClient.MyNewAccount(upstreamContext, request)
 }
 
 func (srv *Server) Run() error {

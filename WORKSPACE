@@ -46,13 +46,19 @@ load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_r
 
 rules_proto_grpc_go_repos()
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+# Load the dependencies of PGV. This is required for the next step to work.
+load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
 
-go_rules_dependencies()
+pgv_dependencies()
 
-go_register_toolchains(
-    version = "1.19.3",
-)
+# Perform any necessary actions to initialize dependencies.
+load("@com_envoyproxy_protoc_gen_validate//bazel:dependency_imports.bzl", "pgv_dependency_imports")
+
+pgv_dependency_imports()
+
+load("@com_envoyproxy_protoc_gen_validate//:dependencies.bzl", "go_third_party")
+
+go_third_party()
 
 # Gazelle
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
@@ -89,15 +95,6 @@ crates_repository()
 load("@crate_index//:defs.bzl", "crate_repositories")
 
 crate_repositories()
-
-# Kotlin
-load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
-
-kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
-
-load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
-
-register_toolchains("//:kotlin_toolchain")
 
 # Java
 load("@rules_proto_grpc//java:repositories.bzl", rules_proto_grpc_java_repos = "java_repos")

@@ -4,13 +4,18 @@ import (
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"time"
 
 	ledger "github.com/bpalermo/galaxy-api/service/ledger/v1"
 )
 
+const (
+	defaultTimeout = time.Second * 15
+)
+
 type LedgerClient struct {
+	*BaseClient
 	ledger.LedgerServiceClient
-	conn *grpc.ClientConn
 }
 
 func NewLedgerClient(target string) *LedgerClient {
@@ -19,20 +24,14 @@ func NewLedgerClient(target string) *LedgerClient {
 		log.Fatal().
 			Err(err).
 			Msg("failed to dial to ledger server")
+		return nil
 	}
 
 	return &LedgerClient{
+		&BaseClient{
+			timeout: defaultTimeout,
+			conn:    conn,
+		},
 		ledger.NewLedgerServiceClient(conn),
-		conn,
 	}
-}
-
-func (l *LedgerClient) Shutdown() error {
-	err := l.conn.Close()
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to close client connection")
-		return err
-	}
-
-	return nil
 }

@@ -41,15 +41,18 @@ func (srv *Server) Echo(_ context.Context, request *grpcGw.EchoRequest) (*grpcGw
 	}, nil
 }
 
-func (srv *Server) NewAccount(ctx context.Context, request *ledger.NewAccountRequest) (*ledger.NewAccountResponse, error) {
-	if request.OwnerId == "" {
-		return nil, status.Error(codes.InvalidArgument, "invalid owner_id")
-	}
+func (srv *Server) MyNewAccount(ctx context.Context, request *ledger.MyNewAccountRequest) (*ledger.MyNewAccountResponse, error) {
 	if request.Currency == "" || len(request.Currency) != 3 {
 		return nil, status.Error(codes.InvalidArgument, "invalid currency")
 	}
 
-	return srv.ledgerClient.NewAccount(ctx, request)
+	clientContext, cancel, err := srv.ledgerClient.NewClientAuthContext(ctx)
+	defer cancel()
+	if err != nil {
+		return nil, status.Error(codes.DataLoss, "failed to get metadata")
+	}
+
+	return srv.ledgerClient.MyNewAccount(clientContext, request)
 }
 
 func (srv *Server) Run() error {

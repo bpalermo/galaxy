@@ -1,5 +1,4 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@io_bazel_rules_kotlin//kotlin:core.bzl", "define_kt_toolchain")
 
 gazelle_binary(
     name = "gazelle-buf",
@@ -12,7 +11,10 @@ gazelle_binary(
     ],
 )
 
+# https://github.com/bufbuild/protoc-gen-validate/issues/514#issuecomment-913042285
 # gazelle:prefix github.com/bpalermo/galaxy
+# gazelle:resolve proto validate/validate.proto @com_github_envoyproxy_protoc_gen_validate//validate:validate_proto
+# gazelle:resolve proto go validate/validate.proto @com_github_envoyproxy_protoc_gen_validate//validate:validate_go_proto
 gazelle(
     name = "gazelle",
 )
@@ -25,17 +27,6 @@ gazelle(
         "-prune",
     ],
     command = "update-repos",
-)
-
-KOTLIN_LANGUAGE_LEVEL = "1.7"
-
-JAVA_LANGUAGE_LEVEL = "17"
-
-define_kt_toolchain(
-    name = "kotlin_toolchain",
-    api_version = KOTLIN_LANGUAGE_LEVEL,
-    jvm_target = JAVA_LANGUAGE_LEVEL,
-    language_version = KOTLIN_LANGUAGE_LEVEL,
 )
 
 platform(

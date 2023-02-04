@@ -7,25 +7,7 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/bpalermo/galaxy-api/service/gateway/v1";
 
-message EchoRequest {
-  string value = 1;
-}
-
-message EchoResponse {
-  string value = 1;
-}
-
 service ApiGatewayService {
-
-  rpc Echo(EchoRequest) returns (EchoResponse) {
-    // option type is http
-    option (google.api.http) = {
-      // this is url, for REST-full/JSON api and method
-      // this line means when a HTTP post request comes with "/v1/echo" call this rpc method over this service
-      post: "/v1/echo"
-      body: "*"
-    };
-  }
 
   rpc MyNewAccount(galaxy.service.ledger.v1.MyNewAccountRequest) returns (galaxy.service.ledger.v1.MyNewAccountResponse) {
     option (google.api.http) = {
@@ -36,6 +18,3 @@ service ApiGatewayService {
     };
   }
 }
-
-
-

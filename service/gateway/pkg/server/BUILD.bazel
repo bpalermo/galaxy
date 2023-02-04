@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "server",
-    srcs = ["server.go"],
+    srcs = [
+        "account.go",
+        "server.go",
+    ],
     importpath = "github.com/bpalermo/galaxy/service/gateway/pkg/server",
     visibility = ["//visibility:public"],
     deps = [

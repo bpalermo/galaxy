@@ -2,15 +2,11 @@ package server
 
 import (
 	"context"
-	"fmt"
 	grpcGw "github.com/bpalermo/galaxy-api/service/gateway/v1"
-	ledger "github.com/bpalermo/galaxy-api/service/ledger/v1"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/status"
 	"net"
 	"net/http"
 	"time"
@@ -29,30 +25,6 @@ func New(grpcServerEndpoint string) *Server {
 		ledgerClient:       service.NewLedgerClient("ledger:50051"),
 		grpcServerEndpoint: grpcServerEndpoint,
 	}
-}
-
-func (srv *Server) Echo(_ context.Context, request *grpcGw.EchoRequest) (*grpcGw.EchoResponse, error) {
-	if request.Value == "" {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-
-	return &grpcGw.EchoResponse{
-		Value: fmt.Sprintf("Hello %s", request.Value),
-	}, nil
-}
-
-func (srv *Server) MyNewAccount(ctx context.Context, request *ledger.MyNewAccountRequest) (*ledger.MyNewAccountResponse, error) {
-	if request.Currency == "" || len(request.Currency) != 3 {
-		return nil, status.Error(codes.InvalidArgument, "invalid currency")
-	}
-
-	clientContext, cancel, err := srv.ledgerClient.NewClientAuthContext(ctx)
-	defer cancel()
-	if err != nil {
-		return nil, status.Error(codes.DataLoss, "failed to get metadata")
-	}
-
-	return srv.ledgerClient.MyNewAccount(clientContext, request)
 }
 
 func (srv *Server) Run() error {

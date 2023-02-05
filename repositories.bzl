@@ -1,7 +1,6 @@
 """Load dependencies needed to compile galaxy."""
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 BUILDBUDDY_TOOLCHAIN_RULE_SHA = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd"
 BUILDBUDDY_TOOLCHAIN_RULE_VERSION = "fd351ca8f152d66fc97f9d98009e0ae000854e8f"
@@ -20,6 +19,9 @@ DOCKER_RULE_SHA = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e39
 
 RULES_BUF_VERSION = "0.1.1"
 RULES_BUF_SHA = "523a4e06f0746661e092d083757263a249fedca535bd6dd819a8c50de074731a"
+
+PROTO_GEN_VALIDATE_VERSION = "0.9.1"
+PROTO_GEN_VALIDATE_SHA = "03694205be52c4753045e7ccc949064987f6355d5e1a459e07271a1d14b8e82a"
 
 def repositories():
     """Loads common dependencies needed to compile galaxy."""
@@ -71,8 +73,9 @@ def repositories():
         )
 
     if not native.existing_rule("com_envoyproxy_protoc_gen_validate"):
-        git_repository(
+        http_archive(
             name = "com_envoyproxy_protoc_gen_validate",
-            tag = "v0.9.1",
-            remote = "https://github.com/bufbuild/protoc-gen-validate.git",
+            sha256 = PROTO_GEN_VALIDATE_SHA,
+            strip_prefix = "protoc-gen-validate-{}".format(PROTO_GEN_VALIDATE_VERSION),
+            urls = ["https://github.com/bufbuild/protoc-gen-validate/archive/refs/tags/v{}.zip".format(PROTO_GEN_VALIDATE_VERSION)],
         )

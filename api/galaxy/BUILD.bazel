@@ -1,24 +1,24 @@
-load("//bazel/rust/proto:index.bzl", "rust_proto_library")
-
-package(default_visibility = ["//visibility:public"])
-
-rust_proto_library(
-    name = "rust_default_library",
-    srcs = ["src/lib.rs"],
-    crate_name = "galaxy_api",
-    proc_macro_deps = [
-        "@crate_index//:prost-derive",
-    ],
-    protos = [
-        "//api/galaxy/service/ledger/v1:proto_files",
-        "//api/galaxy/service/mailer/v1:proto_files",
-        "//api/galaxy/type:proto_files",
-        "//api/galaxy/type/account/v1:proto_files",
-    ],
-    root = "galaxy",
-    deps = [
-        "@crate_index//:prost",
-        "@crate_index//:prost-types",
-        "@crate_index//:tonic",
-    ],
-)
+#load("//bazel/rust/proto:index.bzl", "rust_proto_library")
+#
+#package(default_visibility = ["//visibility:public"])
+#
+#rust_proto_library(
+#    name = "rust_default_library",
+#    srcs = ["src/lib.rs"],
+#    crate_name = "galaxy_api",
+#    proc_macro_deps = [
+#        "@crate_index//:prost-derive",
+#    ],
+#    protos = [
+#        "//api/galaxy/service/ledger/v1:proto_files",
+#        "//api/galaxy/service/mailer/v1:proto_files",
+#        "//api/galaxy/type:proto_files",
+#        "//api/galaxy/type/account/v1:proto_files",
+#    ],
+#    root = "galaxy",
+#    deps = [
+#        "@crate_index//:prost",
+#        "@crate_index//:prost-types",
+#        "@crate_index//:tonic",
+#    ],
+#)

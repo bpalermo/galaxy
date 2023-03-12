@@ -4,6 +4,8 @@ package galaxy.service.ledger.v1;
 
 import "galaxy/type/account/v1/account.proto";
 import "galaxy/type/money.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "github.com/bpalermo/galaxy-api/service/ledger/v1";
 
@@ -17,7 +19,7 @@ message NewAccountResponse {
 }
 
 message MyNewAccountRequest {
-  string currency = 1;
+  string currency = 1 [(validate.rules).string = {len: 3, pattern: '[A-Z]+'}];
 }
 
 message MyNewAccountResponse {
@@ -33,7 +35,10 @@ service LedgerService {
   }
 
   rpc MyNewAccount(MyNewAccountRequest) returns (MyNewAccountResponse) {
-
+    option (google.api.http) = {
+      post: "/v1/accounts"
+      body: "*"
+    };
   }
 
 }

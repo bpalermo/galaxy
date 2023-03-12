@@ -23,6 +23,9 @@ RULES_BUF_SHA = "523a4e06f0746661e092d083757263a249fedca535bd6dd819a8c50de074731
 PROTO_GEN_VALIDATE_VERSION = "0.9.1"
 PROTO_GEN_VALIDATE_SHA = "03694205be52c4753045e7ccc949064987f6355d5e1a459e07271a1d14b8e82a"
 
+PKG_VERSION = "0.8.1"
+PKG_SHA = "8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675"
+
 def repositories():
     """Loads common dependencies needed to compile galaxy."""
 
@@ -78,4 +81,14 @@ def repositories():
             sha256 = PROTO_GEN_VALIDATE_SHA,
             strip_prefix = "protoc-gen-validate-{}".format(PROTO_GEN_VALIDATE_VERSION),
             urls = ["https://github.com/bufbuild/protoc-gen-validate/archive/refs/tags/v{}.zip".format(PROTO_GEN_VALIDATE_VERSION)],
+        )
+
+    if not native.existing_rule("rules_pkg"):
+        http_archive(
+            name = "rules_pkg",
+            sha256 = PKG_SHA,
+            urls = [
+                "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/{}/rules_pkg-{}.tar.gz".format(PKG_VERSION, PKG_VERSION),
+                "https://github.com/bazelbuild/rules_pkg/releases/download/{}/rules_pkg-{}.tar.gz".format(PKG_VERSION, PKG_VERSION),
+            ],
         )

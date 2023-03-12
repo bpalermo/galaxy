@@ -3,7 +3,7 @@ update-repos:
 	@bazel run //:gazelle-update-repos
 
 .PHONY: gazelle
-gazelle: update-repos
+gazelle:
 	@bazel run //:gazelle
 
 .PHONY: cargo-repin
@@ -22,7 +22,7 @@ coverage: gazelle
 clean:
 	@bazel clean
 
-build: gazelle
+build: update-repos gazelle
 	@bazel build //...
 
 .PHONY: build-images
@@ -34,6 +34,10 @@ build-images: build
 .PHONY: build-ledger
 build-ledger:
 	@bazel run //service/ledger/server:image -- --norun
+
+.PHONY: build-gw
+build-gw:
+	@bazel run //service/gateway:gw_amd64 -- --norun
 
 .PHONY: format
 format:

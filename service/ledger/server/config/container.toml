@@ -1,4 +1,0 @@
-log_level = "info"
-
-[database]
-url = "mysql://user:password@db:3306/ledger"

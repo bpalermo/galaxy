@@ -1,16 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 
-gazelle_binary(
-    name = "gazelle-buf",
-    languages = [
-        # Loads the native proto extension
-        "@bazel_gazelle//language/proto:go_default_library",
-        # Loads the Buf extension
-        "@rules_buf//gazelle/buf:buf",
-        # NOTE: This needs to be loaded after the proto language
-    ],
-)
-
 # https://github.com/bufbuild/protoc-gen-validate/issues/514#issuecomment-913042285
 # gazelle:prefix github.com/bpalermo/galaxy
 # gazelle:resolve proto validate/validate.proto @com_github_envoyproxy_protoc_gen_validate//validate:validate_proto

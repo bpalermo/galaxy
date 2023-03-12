@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "sqlc",
+    srcs = [
+        "account.sql.go",
+        "db.go",
+        "models.go",
+    ],
+    importpath = "github.com/bpalermo/galaxy/service/ledger/db/sqlc",
+    visibility = ["//visibility:public"],
+)

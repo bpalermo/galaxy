@@ -5,6 +5,7 @@ load("//:repositories.bzl", "repositories")
 
 repositories()
 
+# Buildbuddy
 load("@io_buildbuddy_buildbuddy_toolchain//:deps.bzl", "buildbuddy_deps")
 
 buildbuddy_deps()
@@ -13,12 +14,7 @@ load("@io_buildbuddy_buildbuddy_toolchain//:rules.bzl", "buildbuddy")
 
 buildbuddy(name = "buildbuddy_toolchain")
 
-load("@rules_buf//buf:repositories.bzl", "rules_buf_dependencies", "rules_buf_toolchains")
-
-rules_buf_dependencies()
-
-rules_buf_toolchains(version = "v1.5.0")
-
+# gRPC
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_repos", "rules_proto_grpc_toolchains")
 
 rules_proto_grpc_toolchains()
@@ -31,6 +27,11 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
+# Buf
+load("@rules_proto_grpc//buf:repositories.bzl", rules_proto_grpc_buf_repos = "buf_repos")
+
+rules_proto_grpc_buf_repos()
+
 # Go
 load("@rules_proto_grpc//:repositories.bzl", "bazel_gazelle", "io_bazel_rules_go")  # buildifier: disable=same-origin-load
 
@@ -38,36 +39,35 @@ io_bazel_rules_go()
 
 bazel_gazelle()
 
-load("@rules_buf//gazelle/buf:repositories.bzl", "gazelle_buf_dependencies")
-
-gazelle_buf_dependencies()
-
 load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
 
 rules_proto_grpc_go_repos()
 
-# Load the dependencies of PGV. This is required for the next step to work.
-load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
-pgv_dependencies()
+go_rules_dependencies()
 
-# Perform any necessary actions to initialize dependencies.
-load("@com_envoyproxy_protoc_gen_validate//bazel:dependency_imports.bzl", "pgv_dependency_imports")
+go_register_toolchains(
+    version = "1.19",
+)
 
-pgv_dependency_imports()
-
-load("@com_envoyproxy_protoc_gen_validate//:dependencies.bzl", "go_third_party")
-
-go_third_party()
-
-# Gazelle
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("//:go_deps.bzl", "go_dependencies")
 
 # gazelle:repository_macro go_deps.bzl%go_dependencies
 go_dependencies()
 
 gazelle_dependencies()
+
+load("//:buf_deps.bzl", "buf_deps")
+
+# gazelle:repository_macro buf_deps.bzl%buf_deps
+buf_deps()
+
+# pkg
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
+rules_pkg_dependencies()
 
 # Rust
 load("@rules_proto_grpc//rust:repositories.bzl", rules_proto_grpc_rust_repos = "rust_repos")

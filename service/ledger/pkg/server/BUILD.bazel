@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "server",
+    srcs = [
+        "account.go",
+        "server.go",
+    ],
+    importpath = "github.com/bpalermo/galaxy/service/ledger/pkg/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//api/galaxy/service/ledger/v1:ledger",
+        "//lib/helper_go",
+        "//service/ledger/db/sqlc",
+        "@com_github_rs_zerolog//log",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+    ],
+)

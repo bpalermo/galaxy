@@ -5,8 +5,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 BUILDBUDDY_TOOLCHAIN_RULE_SHA = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd"
 BUILDBUDDY_TOOLCHAIN_RULE_VERSION = "fd351ca8f152d66fc97f9d98009e0ae000854e8f"
 
-PROTO_GRPC_RULE_SHA = "fb7fc7a3c19a92b2f15ed7c4ffb2983e956625c1436f57a3430b897ba9864059"
-PROTO_GRPC_RULE_VERSION = "4.3.0"
+PROTO_GRPC_RULE_SHA = "9ba7299c5eb6ec45b6b9a0ceb9916d0ab96789ac8218269322f0124c0c0d24e2"
+PROTO_GRPC_RULE_VERSION = "4.5.0"
 
 JAVA_RULES_VERSION = "5.4.0"
 JAVA_RULES_SHA = "9b87757af5c77e9db5f7c000579309afae75cf6517da745de01ba0c6e4870951"
@@ -20,8 +20,8 @@ DOCKER_RULE_SHA = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e39
 RULES_BUF_VERSION = "0.1.1"
 RULES_BUF_SHA = "523a4e06f0746661e092d083757263a249fedca535bd6dd819a8c50de074731a"
 
-PROTO_GEN_VALIDATE_VERSION = "0.9.1"
-PROTO_GEN_VALIDATE_SHA = "03694205be52c4753045e7ccc949064987f6355d5e1a459e07271a1d14b8e82a"
+PROTO_GEN_VALIDATE_VERSION = "1.0.2"
+PROTO_GEN_VALIDATE_SHA = "0b1b1ea8c248dce8c7592dc1a93e4adebd116f0d68123f8eb34251e7ce410866"
 
 def repositories():
     """Loads common dependencies needed to compile galaxy."""
@@ -39,7 +39,7 @@ def repositories():
             name = "rules_proto_grpc",
             sha256 = PROTO_GRPC_RULE_SHA,
             strip_prefix = "rules_proto_grpc-%s" % PROTO_GRPC_RULE_VERSION,
-            urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/%s.tar.gz" % PROTO_GRPC_RULE_VERSION],
+            urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/releases/download/{}/rules_proto_grpc-{}.tar.gz".format(PROTO_GRPC_RULE_VERSION, PROTO_GRPC_RULE_VERSION)],
         )
 
     if not native.existing_rule("rules_java"):

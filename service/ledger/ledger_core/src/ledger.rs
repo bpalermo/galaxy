@@ -1,11 +1,11 @@
 use crate::entity::{account, account::Entity as Account, txn};
 use crate::error::LedgerError;
 
+use chrono::prelude::Utc;
 use migration_lib::{Migrator, MigratorTrait};
 use sea_orm::{prelude::Decimal, *};
 use sea_query::{query::LockType, Expr};
 use std::sync::Arc;
-use util_lib::util;
 use uuid::Uuid;
 
 #[derive(FromQueryResult)]
@@ -112,10 +112,7 @@ impl Ledger {
                 account::Column::Balance,
                 Expr::col(account::Column::Balance).add(amount),
             )
-            .col_expr(
-                account::Column::UpdatedAt,
-                Expr::value(Some(util::Util::now())),
-            )
+            .col_expr(account::Column::UpdatedAt, Expr::value(Some(Utc::now())))
             .filter(Expr::col(account::Column::Id).eq(account_id))
             .exec(db_txn)
             .await?;
@@ -174,10 +171,7 @@ impl Ledger {
                 account::Column::Balance,
                 Expr::col(account::Column::Balance).add(amount),
             )
-            .col_expr(
-                account::Column::UpdatedAt,
-                Expr::value(Some(util::Util::now())),
-            )
+            .col_expr(account::Column::UpdatedAt, Expr::value(Some(Utc::now())))
             .filter(
                 Expr::col(account::Column::Id)
                     .eq(id)
@@ -292,9 +286,10 @@ mod tests {
     use super::*;
     use crate::entity::account::Entity as Account;
     use crate::error::LedgerError;
+
+    use chrono::prelude::Utc;
     use sea_orm::prelude::Decimal;
     use std::sync::Arc;
-    use util_lib::util;
     use uuid::{Uuid, Version};
 
     #[tokio::test]
@@ -311,7 +306,7 @@ mod tests {
                 currency: currency.to_owned(),
                 balance,
                 updated_at: None,
-                created_at: util::Util::now(),
+                created_at: Utc::now(),
             }]])
             .append_exec_results(vec![MockExecResult {
                 last_insert_id: 1,
@@ -385,7 +380,7 @@ mod tests {
                 currency: currency.to_owned(),
                 balance: Decimal::new(10, 0),
                 updated_at: None,
-                created_at: util::Util::now(),
+                created_at: Utc::now(),
             }]])
             .into_connection();
         let txn = db.begin().await?;

@@ -1,6 +1,5 @@
+use chrono::prelude::Utc;
 use sea_orm::{entity::prelude::*, ActiveValue};
-use time::PrimitiveDateTime;
-use util_lib::util;
 use uuid::Uuid;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
@@ -11,8 +10,8 @@ pub struct Model {
     pub account_id: Uuid,
     pub txn_type: TxnType,
     pub amount: Decimal,
-    pub updated_at: Option<PrimitiveDateTime>,
-    pub created_at: PrimitiveDateTime,
+    pub updated_at: Option<ChronoDateTimeUtc>,
+    pub created_at: ChronoDateTimeUtc,
 }
 
 #[derive(Clone, Eq, EnumIter, Debug, DeriveActiveEnum, PartialEq)]
@@ -45,7 +44,7 @@ impl ActiveModelBehavior for ActiveModel {
     fn new() -> Self {
         Self {
             id: ActiveValue::Set(Uuid::new_v4()),
-            created_at: ActiveValue::Set(util::Util::now()),
+            created_at: ActiveValue::Set(Utc::now()),
             ..ActiveModelTrait::default()
         }
     }
@@ -53,7 +52,7 @@ impl ActiveModelBehavior for ActiveModel {
     /// Will be triggered before insert / update
     fn before_save(mut self, insert: bool) -> Result<Self, DbErr> {
         if !insert {
-            self.updated_at = ActiveValue::Set(Some(util::Util::now()));
+            self.updated_at = ActiveValue::Set(Some(Utc::now()));
         }
 
         Ok(self)
@@ -62,17 +61,18 @@ impl ActiveModelBehavior for ActiveModel {
 
 #[cfg(test)]
 mod tests {
-    use sea_orm::{entity::*, DatabaseBackend, MockDatabase, MockExecResult};
 
     use super::*;
+
+    use chrono::prelude::Utc;
+    use sea_orm::{entity::*, DatabaseBackend, MockDatabase, MockExecResult};
 
     #[tokio::test]
     async fn test_insert_transaction() -> Result<(), DbErr> {
         let id = Uuid::new_v4();
         let account_id = Uuid::new_v4();
         let amount = Decimal::new(203402, 4);
-        let now = TimeDateTimeWithTimeZone::now_utc();
-        let created_at = TimeDateTime::new(now.date(), now.time());
+        let created_at = Utc::now();
 
         let db = MockDatabase::new(DatabaseBackend::MySql)
             .append_query_results(vec![vec![Model {

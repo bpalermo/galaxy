@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package galaxy.type;
+package galaxy.types.v1;
 
 option cc_enable_arenas = true;
-option go_package = "github.com/bpalermo/galaxy-api/type/money;money";
+option go_package = "github.com/bpalermo/galaxy-api/types/v1";
 option java_multiple_files = true;
 option java_outer_classname = "MoneyProto";
-option java_package = "dev.palermo.galaxy.type";
+option java_package = "dev.palermo.galaxy.types.v1";
 
 // Represents an amount of money with its currency type.
 message Money {

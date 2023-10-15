@@ -1,13 +1,14 @@
-use galaxy_api::r#type::account::v1::Account;
-use galaxy_api::service::ledger::v1::ledger_service_server::LedgerService;
-use galaxy_api::service::ledger::v1::{
+use account_v1_rust::galaxy::types::account::v1::Account;
+use ledger_core::{entity::account, ledger::Ledger};
+use ledger_v1_rust::galaxy::service::ledger::v1::ledger_service_server::LedgerService;
+use ledger_v1_rust::galaxy::service::ledger::v1::{
     MyNewAccountRequest, MyNewAccountResponse, NewAccountRequest, NewAccountResponse,
 };
-use ledger_core::{entity::account, ledger::Ledger};
+use pbjson_types::Timestamp;
 use std::sync::Arc;
 use tonic::{Request, Response, Status};
 use util_lib::auth::get_owner_id_from_subject_header;
-use util_lib::proto::{decimal_to_google_money, primitive_date_time_to_google_timestamp};
+use util_lib::proto::decimal_to_google_money;
 use util_lib::uuid::parse_uuid_from_string;
 use uuid::Uuid;
 
@@ -41,13 +42,26 @@ impl LedgerService for LedgerServer {
             .await
             .map_err(|_| Status::internal("internal error"))?;
 
+        let mut updated_at = None;
+        if let Some(value) = acc.updated_at {
+            updated_at = Some(Timestamp {
+                seconds: value.timestamp(),
+                nanos: value.timestamp_subsec_nanos() as i32,
+            })
+        }
+
+        let created_at = Some(Timestamp {
+            seconds: acc.created_at.timestamp(),
+            nanos: acc.created_at.timestamp_subsec_nanos() as i32,
+        });
+
         let response = NewAccountResponse {
             account: Some(Account {
                 id: acc.id.to_string(),
                 owner_id: acc.owner_id.to_string(),
                 balance: decimal_to_google_money(acc.currency, acc.balance),
-                updated_at: primitive_date_time_to_google_timestamp(acc.updated_at),
-                created_at: primitive_date_time_to_google_timestamp(Some(acc.created_at)),
+                updated_at,
+                created_at,
             }),
         };
 

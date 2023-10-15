@@ -2,16 +2,9 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@rules_buf//buf:defs.bzl", "buf_lint_test")
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//rust:defs.bzl", "rust_tonic_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
-
-filegroup(
-    name = "proto_files",
-    data = glob(["*.proto"]),
-    visibility = ["//api/galaxy:__pkg__"],
-)
-
-exports_files(["service.proto"])
 
 # gazelle:proto_strip_import_prefix /api
 proto_library(
@@ -19,8 +12,8 @@ proto_library(
     srcs = ["service.proto"],
     strip_import_prefix = "/api",
     deps = [
-        "//api/galaxy/type:money_proto",
-        "//api/galaxy/type/account/v1:account_proto",
+        "//api/galaxy/types/account/v1:account_proto",
+        "//api/galaxy/types/v1:money_proto",
     ],
 )
 
@@ -30,8 +23,8 @@ go_proto_library(
     importpath = "github.com/bpalermo/galaxy-api/service/ledger/v1",
     proto = ":v1_proto",
     deps = [
-        "//api/galaxy/type:money",
-        "//api/galaxy/type/account/v1:account",
+        "//api/galaxy/types/account/v1:account",
+        "//api/galaxy/types/v1:types",
     ],
 )
 
@@ -41,6 +34,18 @@ go_library(
         ":v1_go_proto",
     ],
     importpath = "github.com/bpalermo/galaxy-api/service/ledger/v1",
+)
+
+rust_tonic_grpc_library(
+    name = "ledger_v1_rust",
+    declared_proto_packages = ["galaxy.service.ledger.v1"],
+    prost_proto_deps = [
+        "//api/galaxy/types/v1:types_v1_rust",
+        "//api/galaxy/types/account/v1:account_v1_rust",
+    ],
+    protos = [
+        ":v1_proto",
+    ],
 )
 
 buf_lint_test(

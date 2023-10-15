@@ -1,4 +1,5 @@
 load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@rules_proto_grpc//rust:common.bzl", "create_name_to_label")
 
 package(default_visibility = ["//service/ledger:__subpackages__"])
 
@@ -6,13 +7,13 @@ rust_library(
     name = "ledger_server",
     srcs = glob(["src/**/*.rs"]),
     deps = [
-        "//api/galaxy:rust_default_library",
+        "//api/galaxy/service/ledger/v1:ledger_v1_rust",
+        "//api/galaxy/types/account/v1:account_v1_rust",
         "//lib/util_rust:util_lib",
         "//service/ledger/ledger_core",
         "@crate_index//:log",
-        "@crate_index//:prost",
-        "@crate_index//:tonic",
-        "@crate_index//:tonic-health",
         "@crate_index//:uuid",
+        create_name_to_label("pbjson-types"),
+        create_name_to_label("tonic"),
     ],
 )

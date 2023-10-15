@@ -11,12 +11,12 @@ rust_library(
     deps = [
         "//lib/util_rust:util_lib",
         "//service/ledger/migration:migration_lib",
+        "@crate_index//:chrono",
         "@crate_index//:figment",
         "@crate_index//:log",
         "@crate_index//:once_cell",
         "@crate_index//:sea-orm",
         "@crate_index//:serde",
-        "@crate_index//:time",
         "@crate_index//:uuid",
     ],
 )

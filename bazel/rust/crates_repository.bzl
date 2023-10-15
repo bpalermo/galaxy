@@ -1,6 +1,8 @@
+load("@rules_proto_grpc//rust:crate_deps.bzl", "crate_repositories")
 load("@rules_rust//crate_universe:defs.bzl", "crate", _crates_repository = "crates_repository")
 
 def crates_repository():
+    crate_repositories()
     _crates_repository(
         name = "crate_index",
         cargo_lockfile = "//bazel/rust:Cargo.lock",
@@ -8,6 +10,9 @@ def crates_repository():
         packages = {
             "env_logger": crate.spec(
                 version = "0.10.0",
+            ),
+            "chrono": crate.spec(
+                version = "0.4.31",
             ),
             "figment": crate.spec(
                 version = "0.10.8",
@@ -31,18 +36,6 @@ def crates_repository():
             "once_cell": crate.spec(
                 version = "1.16.0",
             ),
-            "prost": crate.spec(
-                version = "0.11.5",
-            ),
-            "prost-build": crate.spec(
-                version = "0.11.5",
-            ),
-            "prost-derive": crate.spec(
-                version = "0.11.5",
-            ),
-            "prost-types": crate.spec(
-                version = "0.11.5",
-            ),
             "rust_decimal": crate.spec(
                 version = "1.27.0",
                 features = [
@@ -56,6 +49,7 @@ def crates_repository():
                     "mock",
                     "runtime-tokio-rustls",
                     "sqlx-mysql",
+                    "with-chrono",
                 ],
             ),
             "sea-orm-migration": crate.spec(
@@ -73,9 +67,6 @@ def crates_repository():
             "serde_json": crate.spec(
                 version = "1.0.91",
             ),
-            "time": crate.spec(
-                version = "0.3.17",
-            ),
             "tokio": crate.spec(
                 version = "1.23.0",
                 features = [
@@ -85,15 +76,6 @@ def crates_repository():
             ),
             "testcontainers": crate.spec(
                 version = "0.14.0",
-            ),
-            "tonic": crate.spec(
-                version = "0.8.3",
-            ),
-            "tonic-build": crate.spec(
-                version = "0.8.4",
-            ),
-            "tonic-health": crate.spec(
-                version = "0.8.0",
             ),
             "uuid": crate.spec(
                 version = "1.2.2",

@@ -23,7 +23,7 @@ mod tests {
 
     use super::*;
 
-    use galaxy_api::service::ledger::v1::MyNewAccountRequest;
+    use ledger_v1_rust::galaxy::service::ledger::v1::MyNewAccountRequest;
     use tonic::Request;
     use uuid::Uuid;
 

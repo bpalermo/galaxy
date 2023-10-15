@@ -1,9 +1,7 @@
-use galaxy_api::r#type::Money;
 use num_traits::pow::Pow;
-use prost_types::Timestamp;
 use rust_decimal::prelude::*;
 use std::ops::Mul;
-use time::PrimitiveDateTime;
+use types_v1_rust::galaxy::types::v1::Money;
 
 pub fn decimal_to_google_money(currency: String, balance: Decimal) -> Option<Money> {
     let units: Option<i64> = balance.trunc().to_i64();
@@ -27,24 +25,12 @@ pub fn decimal_to_google_money(currency: String, balance: Decimal) -> Option<Mon
     })
 }
 
-pub fn primitive_date_time_to_google_timestamp(
-    date_time: Option<PrimitiveDateTime>,
-) -> Option<Timestamp> {
-    if date_time.is_none() {
-        return None;
-    }
-    return Some(Timestamp {
-        seconds: date_time?.assume_utc().unix_timestamp(),
-        nanos: date_time?.nanosecond() as i32,
-    });
-}
-
 #[cfg(test)]
 mod tests {
 
     use super::*;
-    use galaxy_api::r#type::Money;
     use rust_decimal::Decimal;
+    use types_v1_rust::galaxy::types::v1::Money;
 
     #[test]
     fn test_balance_to_money_zero() {

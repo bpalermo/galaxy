@@ -1,8 +1,8 @@
 use crate::service::LedgerServer;
 
-use galaxy_api::service::ledger::v1::ledger_service_server::LedgerServiceServer;
 use ledger_core::context::Context;
 use ledger_core::error::LedgerError;
+use ledger_v1_rust::galaxy::service::ledger::v1::ledger_service_server::LedgerServiceServer;
 use log::info;
 use std::sync::Arc;
 use tonic::transport::Server as TonicServer;
@@ -21,8 +21,6 @@ impl Server {
         let port = self.ctx.config.port;
         let addr = &format!("0.0.0.0:{}", port).parse().unwrap();
 
-        let (_, health_service) = tonic_health::server::health_reporter();
-
         info!("Server listening on {}", addr);
 
         let ledger_server: LedgerServer = LedgerServer::new(
@@ -31,7 +29,6 @@ impl Server {
         );
 
         TonicServer::builder()
-            .add_service(health_service)
             .add_service(LedgerServiceServer::new(ledger_server))
             .serve(*addr)
             .await?;
